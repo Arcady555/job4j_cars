@@ -1,0 +1,4 @@
+CREATE TABLE cars (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR NOT NULL
+);
