@@ -71,7 +71,7 @@ public class UserRepository {
         Optional<User> result = session.createQuery(
                 "from User as i where i.id = :fId", User.class)
                 .setParameter("fId", userId)
-                .uniqueResultOptional();;
+                .uniqueResultOptional();
         session.getTransaction().commit();
         session.close();
         return result;
