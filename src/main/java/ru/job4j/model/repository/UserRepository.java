@@ -66,14 +66,12 @@ public class UserRepository {
     }
 
     public Optional<User> findById(int userId) {
-        Optional<User> result = Optional.empty();
         Session session = sf.openSession();
         session.beginTransaction();
-        session.createQuery(
+        Optional<User> result = session.createQuery(
                 "from User as i where i.id = :fId", User.class)
-                .setParameter("fId", userId);
-        User user = session.get(User.class, userId);
-        result = Optional.of(user);
+                .setParameter("fId", userId)
+                .uniqueResultOptional();;
         session.getTransaction().commit();
         session.close();
         return result;
