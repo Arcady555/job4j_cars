@@ -1,7 +1,6 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
-import ru.job4j.model.Car;
 import ru.job4j.model.Engine;
 
 import java.util.List;
