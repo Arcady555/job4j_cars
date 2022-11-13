@@ -20,5 +20,5 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    int userId;
+    private User user;
 }
