@@ -20,7 +20,7 @@ public class PostRepository {
 
     public List<Post> findForLastDay() {
         return crudRepository.query(
-                "FROM Post p WHERE TIMESTAMPDIFF(HOUR, NOW(), p.created) < 24;",
+                "FROM Post p WHERE p.created BETWEEN NOW() AND 24 HOURS;",
                 Post.class
         );
     }
