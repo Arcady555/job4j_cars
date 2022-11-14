@@ -3,6 +3,7 @@ package ru.job4j.repository;
 import lombok.AllArgsConstructor;
 import ru.job4j.model.Post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,8 +21,9 @@ public class PostRepository {
 
     public List<Post> findForLastDay() {
         return crudRepository.query(
-                "FROM Post p WHERE p.created BETWEEN NOW() AND 24 HOURS;",
-                Post.class
+                "FROM Post p WHERE p.created BETWEEN :fTimeNow AND :fTimeYesterday;",
+                Post.class,
+                Map.of("fTimeNow", LocalDateTime.now(), "fTimeYesterday", LocalDateTime.now().minusHours(24))
         );
     }
 
