@@ -1,5 +1,5 @@
-create table driver(
+create table if not exists driver(
     id serial primary key,
     name VARCHAR,
-    user_id int REFERENCES auto_user(id)
+    auto_user_id int references auto_user(id)
 );

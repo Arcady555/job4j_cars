@@ -1,14 +1,18 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
+import org.springframework.stereotype.Repository;
 import ru.job4j.model.User;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
-public class UserRepository {
+@ThreadSafe
+public class UserRepository implements AutoCloseable {
     private final CrudRepository crudRepository;
 
     /**
@@ -81,5 +85,10 @@ public class UserRepository {
                 "from User where login = :fLogin", User.class,
                 Map.of("fLogin", login)
         );
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

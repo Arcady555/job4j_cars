@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "driver")
@@ -20,5 +22,7 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private User user;
+
+    @ManyToMany (mappedBy = "drivers")
+    private Set<Car> cars = new HashSet<>();
 }

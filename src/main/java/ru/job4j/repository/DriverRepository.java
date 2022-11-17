@@ -1,14 +1,18 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
+import org.springframework.stereotype.Repository;
 import ru.job4j.model.Driver;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
-public class DriverRepository {
+@ThreadSafe
+public class DriverRepository implements AutoCloseable {
     private final CrudRepository crudRepository;
 
     public List<Driver> findAll() {
@@ -39,5 +43,10 @@ public class DriverRepository {
                 "from Driver where id = :fId", Driver.class,
                 Map.of("fId", driverId)
         );
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

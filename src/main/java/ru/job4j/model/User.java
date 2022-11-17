@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "auto_user")
@@ -21,4 +23,12 @@ public class User {
     private int id;
     private String login;
     private String password;
+
+    @ManyToMany(mappedBy = "participates")
+    private List<Post> posts = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return  login;
+    }
 }

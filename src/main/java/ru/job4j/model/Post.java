@@ -25,13 +25,13 @@ public class Post {
     private String text;
     private LocalDateTime created;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auto_user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
-    private List<PriceHistory> list = new ArrayList<>();
+    private List<PriceHistory> priceHistories = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -40,4 +40,8 @@ public class Post {
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> participates = new ArrayList<>();
+
+    public String toString() {
+        return  text;
+    }
 }

@@ -1,6 +1,8 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
+import org.springframework.stereotype.Repository;
 import ru.job4j.model.Post;
 
 import java.time.LocalDateTime;
@@ -8,20 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
-public class PostRepository {
+@ThreadSafe
+public class PostRepository implements AutoCloseable {
     private final CrudRepository crudRepository;
 
     public List<Post> findAll() {
         return crudRepository.query(
-                "from Post",
+                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates",
                 Post.class
         );
     }
 
     public List<Post> findForLastDay() {
         return crudRepository.query(
-                "FROM Post p WHERE p.created BETWEEN :fTimeNow AND :fTimeYesterday;",
+                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
+                        + " WHERE p.created BETWEEN :fTimeNow AND :fTimeYesterday;",
                 Post.class,
                 Map.of("fTimeNow", LocalDateTime.now(), "fTimeYesterday", LocalDateTime.now().minusHours(24))
         );
@@ -29,14 +34,16 @@ public class PostRepository {
 
     public List<Post> findWithPhoto() {
         return crudRepository.query(
-                "FROM Post p WHERE p.photo != null;",
+                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
+                        + " WHERE p.photo != null;",
                 Post.class
         );
     }
 
     public List<Post> findTheMark(String brand) {
         return crudRepository.query(
-                "FROM Post p WHERE p.text LIKE %:fBrand% ",
+                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
+                        + " WHERE p.text LIKE %:fBrand% ",
                 Post.class,
                 Map.of("fBrand", brand)
 
@@ -53,16 +60,21 @@ public class PostRepository {
     }
 
     public void delete(int postId) {
-        crudRepository.run(
-                "delete from Post where id = :fId",
-                Map.of("fId", postId)
-        );
+        Post post = findById(postId).get();
+        crudRepository.run(session -> session.delete(post));
     }
 
     public Optional<Post> findById(int postId) {
         return crudRepository.optional(
-                "from Post where id = :fId", Post.class,
+                "select distinct p from Post p join fetch p.priceHistories"
+                 /**       + "join fetch p.participates"  */
+                        + " where p.id = :fId", Post.class,
                 Map.of("fId", postId)
         );
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

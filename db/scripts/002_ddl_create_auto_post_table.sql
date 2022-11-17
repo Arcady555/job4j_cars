@@ -1,4 +1,4 @@
-CREATE TABLE auto_post (
+CREATE TABLE if not exists auto_post (
   id SERIAL PRIMARY KEY,
   text TEXT,
   created TIMESTAMP,

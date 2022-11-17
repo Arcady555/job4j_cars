@@ -1,14 +1,18 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
+import org.springframework.stereotype.Repository;
 import ru.job4j.model.Engine;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
-public class EngineRepository {
+@ThreadSafe
+public class EngineRepository implements AutoCloseable {
     private final CrudRepository crudRepository;
 
     public List<Engine> findAll() {
@@ -39,5 +43,10 @@ public class EngineRepository {
                 "from Engine where id = :fId", Engine.class,
                 Map.of("fId", engineId)
         );
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }
