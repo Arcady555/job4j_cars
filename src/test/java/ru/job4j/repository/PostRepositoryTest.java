@@ -29,8 +29,12 @@ class PostRepositoryTest {
         DriverRepository dR = new DriverRepository(crudRepository);
         EngineRepository eR = new EngineRepository(crudRepository)
         ) {
-            User user = uR.findById(1).get();
+            /**   User user = uR.findById(1).get(); */
+            User user = new User();
+            user.setLogin("A");
+            user.setPassword("B");
             Post post1 = new Post();
+            uR.create(user);
             post1.setText("Mercedes is very good!");
             post1.setCreated(LocalDateTime.now());
             post1.setUser(user);
@@ -41,6 +45,7 @@ class PostRepositoryTest {
                     LocalDateTime.of(2022, 10, 10, 22, 11, 11),
                     post1);
             pHR.create(pH);
+            user.setPosts(List.of(post1));
             post1.setPriceHistories(List.of(pH));
           /**  user.setPosts(List.of(post1)); */
             Post result = postRepository.findById(post1.getId()).get();
