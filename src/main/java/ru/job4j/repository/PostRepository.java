@@ -66,8 +66,8 @@ public class PostRepository implements AutoCloseable {
 
     public Optional<Post> findById(int postId) {
         return crudRepository.optional(
-                "select distinct p from Post p join fetch p.priceHistories"
-                 /**       + "join fetch p.participates"  */
+                "select distinct p from Post p join fetch p.priceHistories "
+                        + "join fetch p.participates"
                         + " where p.id = :fId", Post.class,
                 Map.of("fId", postId)
         );

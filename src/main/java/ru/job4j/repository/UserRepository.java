@@ -49,7 +49,7 @@ public class UserRepository implements AutoCloseable {
      * @return список пользователей.
      */
     public List<User> findAllOrderById() {
-        return crudRepository.query("from User", User.class);
+        return crudRepository.query("select distinct u from User u join fetch u.posts", User.class);
     }
 
     /**
@@ -58,7 +58,7 @@ public class UserRepository implements AutoCloseable {
      */
     public Optional<User> findById(int userId) {
         return crudRepository.optional(
-                "from User where id = :fId", User.class,
+                "select distinct u from User u join fetch u.posts where u.id = :fId", User.class,
                 Map.of("fId", userId)
         );
     }
@@ -70,7 +70,7 @@ public class UserRepository implements AutoCloseable {
      */
     public List<User> findByLikeLogin(String key) {
         return crudRepository.query(
-                "from User where login like :fKey", User.class,
+                "select distinct u from User u join fetch u.posts where u.login like :fKey", User.class,
                 Map.of("fKey", "%" + key + "%")
         );
     }
@@ -82,7 +82,7 @@ public class UserRepository implements AutoCloseable {
      */
     public Optional<User> findByLogin(String login) {
         return crudRepository.optional(
-                "from User where login = :fLogin", User.class,
+                "select distinct u from User u join fetch u.posts where u.login = :fLogin", User.class,
                 Map.of("fLogin", login)
         );
     }
