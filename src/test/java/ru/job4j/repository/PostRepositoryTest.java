@@ -34,18 +34,15 @@ class PostRepositoryTest {
             post1.setText("Mercedes is very good!");
             post1.setCreated(LocalDateTime.now());
             post1.setUser(user);
-           // user.setPosts(List.of(post1)); //
             post1.setParticipates(List.of(user));
-         //   user.setPosts(List.of(post1)); //
             postRepository.create(post1);
-        //    user.setPosts(List.of(post1)); //
             PriceHistory pH = new PriceHistory(
                     0, 100, 200,
                     LocalDateTime.of(2022, 10, 10, 22, 11, 11),
                     post1);
             pHR.create(pH);
             post1.setPriceHistories(List.of(pH));
-          //  user.setPosts(List.of(post1)); //
+          /**  user.setPosts(List.of(post1)); */
             Post result = postRepository.findById(post1.getId()).get();
             assertThat(result.getText(), is(post1.getText()));
         }
