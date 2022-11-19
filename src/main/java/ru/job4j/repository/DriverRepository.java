@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @ThreadSafe
-public class DriverRepository implements AutoCloseable {
+public class DriverRepository {
     private final CrudRepository crudRepository;
 
     public List<Driver> findAll() {
@@ -43,10 +43,5 @@ public class DriverRepository implements AutoCloseable {
                 "from Driver where id = :fId", Driver.class,
                 Map.of("fId", driverId)
         );
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

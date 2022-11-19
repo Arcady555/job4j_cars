@@ -8,16 +8,11 @@ import ru.job4j.model.PriceHistory;
 @Repository
 @AllArgsConstructor
 @ThreadSafe
-public class PriceHistoryRepository implements AutoCloseable {
+public class PriceHistoryRepository {
     private final CrudRepository crudRepository;
 
     public PriceHistory create(PriceHistory pH) {
         crudRepository.run(session -> session.persist(pH));
         return pH;
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

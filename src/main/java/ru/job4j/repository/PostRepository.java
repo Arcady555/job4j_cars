@@ -13,20 +13,24 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @ThreadSafe
-public class PostRepository implements AutoCloseable {
+public class PostRepository {
     private final CrudRepository crudRepository;
 
     public List<Post> findAll() {
         return crudRepository.query(
-                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates",
+                "select distinct p from Post p "
+                        + "join fetch p.priceHistories "
+                        + "join fetch p.participates;",
                 Post.class
         );
     }
 
     public List<Post> findForLastDay() {
         return crudRepository.query(
-                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
-                        + " WHERE p.created BETWEEN :fTimeNow AND :fTimeYesterday;",
+                "select distinct p from Post p "
+                        + "join fetch p.priceHistories "
+                        + "join fetch p.participates "
+                        + "WHERE p.created BETWEEN :fTimeNow AND :fTimeYesterday;",
                 Post.class,
                 Map.of("fTimeNow", LocalDateTime.now(), "fTimeYesterday", LocalDateTime.now().minusHours(24))
         );
@@ -34,16 +38,20 @@ public class PostRepository implements AutoCloseable {
 
     public List<Post> findWithPhoto() {
         return crudRepository.query(
-                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
-                        + " WHERE p.photo != null;",
+                "select distinct p from Post p "
+                        + "join fetch p.priceHistories "
+                        + "join fetch p.participates "
+                        + "WHERE p.photo != null;",
                 Post.class
         );
     }
 
     public List<Post> findTheMark(String brand) {
         return crudRepository.query(
-                "select distinct p from Post p join fetch p.priceHistories join fetch p.participates"
-                        + " WHERE p.text LIKE %:fBrand% ",
+                "select distinct p from Post p "
+                        + "join fetch p.priceHistories "
+                        + "join fetch p.participates "
+                        + "WHERE p.text LIKE %:fBrand%;",
                 Post.class,
                 Map.of("fBrand", brand)
 
@@ -67,14 +75,10 @@ public class PostRepository implements AutoCloseable {
     public Optional<Post> findById(int postId) {
         return crudRepository.optional(
                 "select distinct p from Post p join fetch p.priceHistories "
-                        + "join p.participates"
-                        + " where p.id = :fId", Post.class,
+                        + "join fetch p.participates "
+                        + "where p.id = :fId;",
+                Post.class,
                 Map.of("fId", postId)
         );
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

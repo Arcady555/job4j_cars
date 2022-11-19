@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @ThreadSafe
-public class UserRepository implements AutoCloseable {
+public class UserRepository {
     private final CrudRepository crudRepository;
 
     /**
@@ -85,10 +85,5 @@ public class UserRepository implements AutoCloseable {
                 "select distinct u from User u join fetch u.posts where u.login = :fLogin", User.class,
                 Map.of("fLogin", login)
         );
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

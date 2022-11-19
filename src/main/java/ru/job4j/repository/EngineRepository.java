@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @ThreadSafe
-public class EngineRepository implements AutoCloseable {
+public class EngineRepository {
     private final CrudRepository crudRepository;
 
     public List<Engine> findAll() {
@@ -43,10 +43,5 @@ public class EngineRepository implements AutoCloseable {
                 "from Engine where id = :fId", Engine.class,
                 Map.of("fId", engineId)
         );
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }
